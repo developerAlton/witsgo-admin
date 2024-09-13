@@ -95,3 +95,20 @@ header img#profilePicture {
 }
 
 
+
+.rental-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.rental-table th, .rental-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.rental-table th {
+    background-color: #23527c;
+    color: white;
+}
