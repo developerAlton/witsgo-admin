@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database</title>
+    <link rel="stylesheet" href="databasePage.css">
+    <script src="databasePage.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1 style="display: flex; align-items: center; justify-content: space-between;">
+            <img src="pfp.jpg" alt="Profile Picture" id="profilePicture">
+            <span style="margin: auto;">Database</span>
+        </h1>
+    </header>
+
+
+    <nav class = "topNav">
+        <a href="adminHome.html">Home</a>
+        <a href="databasePage.html">Database</a>
+    </nav>
+
+    <section class="card-display">
+        <h2 class="card-title">Database</h2>
+        <section class="card-content">
+
+            <div id="selectDb">
+                <label for="database" Select Database:>Select Database: </label>
+                <select id = "database" onchange="updateCollections()">
+                    <option value="transportation">-- Select Database --</option>
+                </select>
+            </div>
+
+            <div id="selectCollection">
+                <label for="collections">Select Collection: </label>
+                <select id = "collections" onchange="generateForm()">
+                    <option value="transportation">-- Select Collection --</option>
+                </select>
+            </div>
+
+            <div id="searchSection">
+                <form id="form">
+                    <label for="search">Search: </label>
+                    <input type="text" id="search" name="search" onkeyup="search()">
+                </form>
+            </div>
+
+        </section>
+    </section>
+    
+</body>
+</html>
