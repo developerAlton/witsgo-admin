@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Data Insertion</title>
+  <script>
+    let databases = {
+    "Maps": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
+    "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
+    "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"]
+  };
+    let collectionSchemas = {
+    "Maps": {
+      "Amenity": {
+        "amenity_type": { "type": "string", "required": true },
+        "building_id": { "type": "string", "required": true },
+        "latitude": { "type": "number", "required": true },
+        "longitude": { "type": "number", "required": true },
+        "created_at": { "type": "date", "required": false }
+      },
+      "Building": {
+        "building_name": { "type": "string", "required": true },
+        "latitude": { "type": "number", "required": true },
+        "longitude": { "type": "number", "required": true },
+        "created_at": { "type": "date", "required": false }
+      },
+      "PointOfInterest": {
+        "poi_name": { "type": "string", "required": true },
+        "latitude": { "type": "number", "required": true },
+        "longitude": { "type": "number", "required": true },
+        "created_at": { "type": "date", "required": false }
+      },
+      "Room": {
+        "room_name": { "type": "string", "required": true },
+        "building_id": { "type": "string", "required": true },
+        "created_at": { "type": "date", "required": false }
+      },
+      "Route": {
+        "route_name": { "type": "string", "required": true },
+        "distance": { "type": "number", "required": true },
+        "estimated_time": { "type": "number", "required": true },
+        "created_at": { "type": "date", "required": false }
+      }
+    },
+    "Transportation": {
+      "Route": {
+        "route_name": { "type": "string", "required": true },
+        "stops": { "type": "array", "required": true }
+      },
+      "Schedule": {
+        "route_id": { "type": "string", "required": true },
+        "stop_id": { "type": "string", "required": true },
+        "arrival_time": { "type": "date", "required": true },
+        "departure_time": { "type": "date", "required": true }
+      },
+      "Stop": {
+        "stop_name": { "type": "string", "required": true },
+        "location": { "type": "string", "required": true }
+      },
+      "Tracking": {
+        "vehicle_id": { "type": "string", "required": true },
+        "route_id": { "type": "string", "required": true },
+        "current_stop_id": { "type": "string", "required": true },
+        "timestamp": { "type": "date", "required": true },
+        "latitude": { "type": "number", "required": true },
+        "longitude": { "type": "number", "required": true }
+      },
+      "Vehicle": {
+        "vehicle_number": { "type": "string", "required": true },
+        "vehicle_type": { "type": "string", "required": true }
+      }
+    },
+    "UserRoutes": {
+      "NavigationHistory": {
+        "history_id": { "type": "string", "required": true },
+        "route_id": { "type": "string", "required": true },
+        "start_time": { "type": "date", "required": true },
+        "end_time": { "type": "date", "required": true },
+        "created_at": { "type": "date", "required": false }
+      },
+      "Preferences": {
+        "preference_id": { "type": "string", "required": true },
+        "user_id": { "type": "string", "required": true },
+        "preferences_type": { "type": "string", "enum": ["wheelchair", "tolls_free", "none"], "required": true },
+        "preferences_value": { "type": "boolean", "required": true },
+        "updated_at": { "type": "date", "required": false }
+      },
+      "Routes": {
+        "route_id": { "type": "string", "required": true },
+        "user_id": { "type": "string", "required": true },
+        "start_location": { "type": "object", "required": true },
+        "end_location": { "type": "object", "required": true },
+        "duration": { "type": "number", "required": true },
+        "route_data": { "type": "string", "required": true },
+        "created_at": { "type": "date", "required": true }
+      },
+      "User": {
+        "user_id": { "type": "string", "required": true },
+        "user_name": { "type": "string", "required": true },
+        "email": { "type": "string", "required": true }
+      }
+    }
+  }
+  ;
+
+    async function loadData() {
+      populateDatabases();
+    }
+
+    function populateDatabases() {
+      const dbSelect = document.getElementById("database");
+      for (const db in databases) {
+        const option = document.createElement("option");
+        option.value = db;
+        option.text = db;
+        dbSelect.appendChild(option);
+      }
+    }
+
+    function updateCollections() {
+      const dbSelect = document.getElementById("database");
+      const collectionSelect = document.getElementById("collection");
+      const selectedDb = dbSelect.value;
+
+      // Clear previous options
+      collectionSelect.innerHTML = "";
+
+      // Populate collections based on the selected database
+      if (collectionSchemas[selectedDb]) {
+        for (const collection in collectionSchemas[selectedDb]) {
+          const option = document.createElement("option");
+          option.value = collection;
+          option.text = collection;
+          collectionSelect.appendChild(option);
+        }
+      }
+    }
+
+    function generateForm() {
+      const dbSelect = document.getElementById("database").value;
+      const collectionSelect = document.getElementById("collection").value;
+      const schema = collectionSchemas[dbSelect] ? collectionSchemas[dbSelect][collectionSelect] : null;
+
+      const formDiv = document.getElementById("form-container");
+      formDiv.innerHTML = ""; // Clear previous form fields
+
+      if (schema) {
+        for (const field in schema) {
+          const fieldInfo = schema[field];
+          const label = document.createElement("label");
+          label.textContent = `${field}: `;
+
+          let input;
+
+          switch (fieldInfo.type) {
+            case "string":
+              input = document.createElement("input");
+              input.type = "text";
+              input.name = field;
+              break;
+            case "number":
+              input = document.createElement("input");
+              input.type = "number";
+              input.name = field;
+              break;
+            case "date":
+              input = document.createElement("input");
+              input.type = "date";
+              input.name = field;
+              break;
+            case "array":
+              input = document.createElement("textarea");
+              input.placeholder = "Enter JSON array here";
+              input.name = field;
+              break;
+            case "object":
+              input = document.createElement("textarea");
+              input.placeholder = "Enter JSON object here";
+              input.name = field;
+              break;
+            default:
+              input = document.createElement("input");
+              input.type = "text";
+              input.name = field;
+              break;
+          }
+
+          if (fieldInfo.required) {
+            input.required = true;
+          }
+
+          formDiv.appendChild(label);
+          formDiv.appendChild(input);
+          formDiv.appendChild(document.createElement("br"));
+        }
+      } else {
+        formDiv.innerHTML = "No schema available for selected collection.";
+      }
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+
+        // Process array and object fields only if they're valid JSON
+        for (const key in data) {
+          try {
+            const parsedValue = JSON.parse(data[key]);
+            
+            // Check if parsed value is an object or array
+            if (typeof parsedValue === 'object' && parsedValue !== null) {
+              data[key] = parsedValue;
+            }
+          } catch (e) {
+            // Not valid JSON, leave as is
+          }
+        }
+
+        console.log(JSON.stringify({data:data}));
+    }
+
+
+    // Load data when DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</head>
+<body>
+  <h1>Insert Data into MongoDB</h1>
+
+  <!-- Step 1: Select Database -->
+  <label for="database">Select Database:</label>
+  <select id="database" onchange="updateCollections()">
+    <option value="">-- Select Database --</option>
+    <!-- Databases will be populated dynamically -->
+  </select>
+
+  <br>
+
+  <!-- Step 2: Select Collection -->
+  <label for="collection">Select Collection:</label>
+  <select id="collection" onchange="generateForm()">
+    <option value="">-- Select Collection --</option>
+    <!-- Collections will be populated dynamically -->
+  </select>
+
+  <br>
+
+  <!-- Step 3: Dynamic Form will be generated here -->
+  <form id="data-form" onsubmit="handleSubmit(event)">
+    <div id="form-container">
+      <!-- Form fields will be generated dynamically -->
+    </div>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

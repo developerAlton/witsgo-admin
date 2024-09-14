@@ -1,0 +1,19 @@
+{
+  "name": "witsgo-admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Prashant-Kessa/witsgo-admin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Prashant-Kessa/witsgo-admin/issues"
+  },
+  "homepage": "https://github.com/Prashant-Kessa/witsgo-admin#readme"
+}

@@ -110,3 +110,13 @@ header img#profilePicture {
     align-items: center;
     margin-bottom: 20px;
 }
+
+.input-field{
+    margin: 10px;
+    padding: 5px;
+}
+
+
+.output{
+    margin: 10;
+}
