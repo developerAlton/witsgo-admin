@@ -1,5 +1,4 @@
 // databasePage.js
-
 const databases = {
     "Map": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
     "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
@@ -16,30 +15,25 @@ const collectionSchemas = {
         "building_id": { "type": "string", "required": true },
         "latitude": { "type": "number", "required": true },
         "longitude": { "type": "number", "required": true },
-        "created_at": { "type": "date", "required": false }
       },
       "Building": {
         "building_name": { "type": "string", "required": true },
         "latitude": { "type": "number", "required": true },
         "longitude": { "type": "number", "required": true },
-        "created_at": { "type": "date", "required": false }
       },
       "PointOfInterest": {
         "poi_name": { "type": "string", "required": true },
         "latitude": { "type": "number", "required": true },
         "longitude": { "type": "number", "required": true },
-        "created_at": { "type": "date", "required": false }
       },
       "Room": {
         "room_name": { "type": "string", "required": true },
         "building_id": { "type": "string", "required": true },
-        "created_at": { "type": "date", "required": false }
       },
       "Route": {
         "route_name": { "type": "string", "required": true },
         "distance": { "type": "number", "required": true },
         "estimated_time": { "type": "number", "required": true },
-        "created_at": { "type": "date", "required": false }
       }
     },
     "Transportation": {
@@ -76,14 +70,12 @@ const collectionSchemas = {
         "route_id": { "type": "string", "required": true },
         "start_time": { "type": "date", "required": true },
         "end_time": { "type": "date", "required": true },
-        "created_at": { "type": "date", "required": false }
       },
       "Preferences": {
         "preference_id": { "type": "string", "required": true },
         "user_id": { "type": "string", "required": true },
         "preferences_type": { "type": "string", "enum": ["wheelchair", "tolls_free", "none"], "required": true },
         "preferences_value": { "type": "boolean", "required": true },
-        "updated_at": { "type": "date", "required": false }
       },
       "Routes": {
         "route_id": { "type": "string", "required": true },
@@ -92,7 +84,6 @@ const collectionSchemas = {
         "end_location": { "type": "object", "required": true },
         "duration": { "type": "number", "required": true },
         "route_data": { "type": "string", "required": true },
-        "created_at": { "type": "date", "required": true }
       },
       "User": {
         "user_id": { "type": "string", "required": true },
@@ -104,32 +95,8 @@ const collectionSchemas = {
   ;
 
 
-
-// Sample Data
-const sampleData = {
-    transportation: {
-        buildings: [
-            { id: 1, building_name: "Main Building", latitude: -26.1928, longitude: 28.0325 },
-            { id: 2, building_name: "Library", latitude: -26.1930, longitude: 28.0340 }
-        ],
-        rooms: [
-            { id: 1, room_name: "Room A", building_id: 1 },
-            { id: 2, room_name: "Room B", building_id: 2 }
-        ],
-        amenities: [
-            { id: 1, amenity_type: "Cafeteria", building_id: 1, latitude: -26.1928, longitude: 28.0325 },
-            { id: 2, amenity_type: "Parking", building_id: 2, latitude: -26.1930, longitude: 28.0340 }
-        ],
-        routes: [
-            { id: 1, route_name: "Route 1", distance: 1.5, estimated_time: 10 },
-            { id: 2, route_name: "Route 2", distance: 2.0, estimated_time: 15 }
-        ],
-        pointsOfInterest: [
-            { id: 1, poi_name: "Library Entrance", latitude: -26.1931, longitude: 28.0341 },
-            { id: 2, poi_name: "Main Gate", latitude: -26.1927, longitude: 28.0326 }
-        ]
-    }
-};
+const baseURL = "https://witsgobackend.azurewebsites.net/";
+// const baseURL = "http://localhost:3000/";
 
 // State to track current action and collection
 let currentAction = "";
@@ -222,6 +189,30 @@ function generateForm() {
     }
 }
 
+
+async function populateUpdate(event){
+    let toSendData={
+      "database":document.getElementById('database').value,
+      "collection":document.getElementById('collections').value,
+      "data":{"_id":document.getElementById("_id").value}
+    }
+
+    const res = await axios.post(baseURL+"v1/admin/get_data",toSendData,{
+      headers: {
+          'Content-Type': 'application/json'
+      }});
+    
+    Object.keys(res.data.data).forEach((key)=>{
+      let element = document.getElementById(key);
+      if (element!=null){
+        element.value=res.data.data[key];
+      }
+
+    })
+}
+
+
+
 // Generate form fields for inserting/updating data
 function generateInsertFormFields(formSection) {
     const dbSelect = document.getElementById("database").value;
@@ -229,6 +220,27 @@ function generateInsertFormFields(formSection) {
       const schema = collectionSchemas[dbSelect] ? collectionSchemas[dbSelect][collectionSelect] : null;
 
       formSection.innerHTML = ""; // Clear previous form fields
+
+      if (currentAction=="update" || currentAction=="delete"){
+        const label = document.createElement("label");
+        label.textContent = "_id:"
+
+        let input;
+
+        input = document.createElement("input");
+        input.classList.add("input-field");
+        input.id="_id";
+        input.type = "text";
+        input.name = "_id";
+        input.required=true;
+        input.addEventListener("blur",populateUpdate)
+
+        formSection.appendChild(label);
+        formSection.appendChild(input);
+        formSection.appendChild(document.createElement("br"));
+      }
+
+
 
       if (schema) {
         for (const field in schema) {
@@ -242,9 +254,9 @@ function generateInsertFormFields(formSection) {
             case "string":
               input = document.createElement("input");
               input.classList.add("input-field");
-
               input.type = "text";
               input.name = field;
+              input.id = field;
               break;
             case "number":
               input = document.createElement("input");
@@ -253,24 +265,28 @@ function generateInsertFormFields(formSection) {
               input.type = "number";
               input.step="any";
               input.name = field;
+              input.id = field;
               break;
             case "date":
               input = document.createElement("input");
               input.classList.add("input-field");
               input.type = "date";
               input.name = field;
+              input.id = field;
               break;
             case "array":
               input = document.createElement("textarea");
               input.classList.add("input-field");
               input.placeholder = "Enter JSON array here";
               input.name = field;
+              input.id = field;
               break;
             case "object":
               input = document.createElement("textarea");
               input.classList.add("input-field");
               input.placeholder = "Enter JSON object here";
               input.name = field;
+              input.id = field;
               break;
             default:
               input = document.createElement("input");
@@ -280,7 +296,7 @@ function generateInsertFormFields(formSection) {
               break;
           }
 
-          if (fieldInfo.required) {
+          if (fieldInfo.required && currentAction=="insert") {
             input.required = true;
           }
 
@@ -301,33 +317,85 @@ async function handleSubmit(event) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
+    let outputData = {};
+
     // Process fields as JSON if they're valid
-    Object.keys(data).forEach(key => {
-        try {
-            const parsedValue = JSON.parse(data[key]);
+    Object.keys(data).forEach((element)=>{
+      if (data[element].length!=0){
+        outputData[element] = data[element]
+      }
+    })
 
-            // Check if parsed value is an object or array
-            if (typeof parsedValue === 'object' && parsedValue !== null) {
-                data[key] = parsedValue;
-            }
-        } catch {
-            // Not valid JSON, leave as is
-        }
-    });
+    
+    let toSendData;
 
-    let toSendData = {
+    if (currentAction=="get"){
+      toSendData={
         "database":document.getElementById('database').value,
         "collection":document.getElementById('collections').value,
-        "data":JSON.stringify(data)
+        "data":outputData
+      }
+    }else{
+      toSendData={
+        "database":document.getElementById('database').value,
+        "collection":document.getElementById('collections').value,
+        "data":data
+      }
     }
 
-    let baseURL = "https://witsgobackend.azurewebsites.net/";
+
     let endpoint = "v1/admin/"+currentAction+"_data";
     let url = baseURL+endpoint;
 
+
     if (currentAction=="get" || currentAction=="insert"){
-        const res = await axios.post(url,toSendData);
-        console.log(res);
+      try{
+        const res = await axios.post(url,toSendData,{
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        });
+
+        let resData = JSON.stringify(res.data);
+
+        let outputText = document.getElementById("output");
+
+        //clear
+        while (outputText.firstChild){
+          outputText.removeChild(outputText.firstChild)
+        }
+
+        let createText = document.createElement("p");
+
+        createText.textContent=resData;
+
+        outputText.appendChild(createText);
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
+    else if (currentAction="update"){
+        const res = await axios.put(url,toSendData,{
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        });
+
+        let resData = JSON.stringify(res.data);
+
+        let outputText = document.getElementById("output");
+
+        //clear
+        while (outputText.firstChild){
+          outputText.removeChild(outputText.firstChild)
+        }
+
+        let createText = document.createElement("p");
+
+        createText.textContent=resData;
+
+        outputText.appendChild(createText);
     }
 }
 
