@@ -3,12 +3,13 @@ const databases = {
     "Map": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
     "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
     "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"],
-    "Accessibility":[],
-    "RentalService":[]
+    "Accessibility":["AccessibleRoute","Location"],
+    "RentalService":["Rental","Vehicle","Station","Student"]
 };
 
 
 const collectionSchemas = {
+    
     "Map": {
       "Amenity": {
         "amenity_type": { "type": "string", "required": true },
@@ -20,6 +21,8 @@ const collectionSchemas = {
         "building_name": { "type": "string", "required": true },
         "latitude": { "type": "number", "required": true },
         "longitude": { "type": "number", "required": true },
+        "campus":{"type": "string","required": true},
+        "type":{"type":"string","required":true,default:"building"},
       },
       "PointOfInterest": {
         "poi_name": { "type": "string", "required": true },
@@ -28,6 +31,8 @@ const collectionSchemas = {
       },
       "Room": {
         "room_name": { "type": "string", "required": true },
+        "code":{"type":"string","required": true},
+        "type":{"type":"string","required":true},
         "building_id": { "type": "string", "required": true },
       },
       "Route": {
@@ -90,13 +95,52 @@ const collectionSchemas = {
         "user_name": { "type": "string", "required": true },
         "email": { "type": "string", "required": true }
       }
+    },
+    "Accessibility": {
+      "AccessibleRoute": {
+        "route_name": { "type": "string", "required": true },
+        "location_id": { "type": "ObjectId", "ref": "Location", "required": true },
+        "created_at": { "type": "date", "default": Date.now }
+      },
+      "Location": {
+        "name": { "type": "string", "required": true },
+        "latitude": { "type": "number", "required": true },
+        "longitude": { "type": "number", "required": true },
+        "wheelchair_friendly": { "type": "boolean", "default": false },
+        "ramp_available": { "type": "boolean", "default": false },
+        "elevator_nearby": { "type": "boolean", "default": false },
+      }
+    },
+    "RentalService": {
+      "Rental": {
+        "student_id": { "type": "ObjectId", "ref": "Student", "required": true },
+        "vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
+        "rental_start_time": { "type": "date", "required": true },
+        "rental_end_time": { "type": "date", "required": true },
+        "is_active": { "type": "boolean", "required": true },
+      },
+      "Vehicle": {
+        "barcode": { "type": "string", "unique": true, "required": true },
+        "type": { "type": "string", "required": true },
+        "status": { "type": "string", "required": true},
+        "current_station_id": { "type": "ObjectId", "ref": "Station", "required": true },
+      },
+      "Station": {
+        "location": { "type": "string", "required": true },
+      },
+      "Student": {
+        "student_number": { "type": "string", "unique": true, "required": true },
+        "name": { "type": "string", "required": true },
+        "email": { "type": "string", "unique": true, "required": true },
+        "rented_vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
+      }
     }
   }
   ;
 
 
-const baseURL = "https://witsgobackend.azurewebsites.net/";
-// const baseURL = "http://localhost:3000/";
+// const baseURL = "https://witsgobackend.azurewebsites.net/";
+const baseURL = "http://localhost:3000/";
 
 // State to track current action and collection
 let currentAction = "";
@@ -299,6 +343,11 @@ function generateInsertFormFields(formSection) {
           if (fieldInfo.required && currentAction=="insert") {
             input.required = true;
           }
+
+          if (fieldInfo.default!=undefined && currentAction!="get"){
+            input.value = fieldInfo.default;
+          }
+
 
           formSection.appendChild(label);
           formSection.appendChild(input);
