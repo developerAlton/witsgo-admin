@@ -1,7 +1,7 @@
 // databasePage.js
 
 const databases = {
-    "Maps": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
+    "Map": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
     "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
     "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"],
     "Accessibility":[],
@@ -10,7 +10,7 @@ const databases = {
 
 
 const collectionSchemas = {
-    "Maps": {
+    "Map": {
       "Amenity": {
         "amenity_type": { "type": "string", "required": true },
         "building_id": { "type": "string", "required": true },
@@ -185,6 +185,7 @@ function setAction(action) {
 // Generate form inputs dynamically based on selected action and collection
 function generateForm() {
     const formSection = document.getElementById("actionForm");
+    formSection.addEventListener("submit",handleSubmit);
     formSection.innerHTML = "";
     currentCollection = document.getElementById("collections").value;
 
@@ -192,26 +193,31 @@ function generateForm() {
         return;
     }
 
+    let button = document.createElement('button');
+    button.type = 'submit';
+    // button.addEventListener('click', handleSubmit);
+
     // Generate form fields based on current action
     switch (currentAction) {
         case "get":
             generateInsertFormFields(formSection);
-            // formSection.innerHTML = `<label for="id">Enter ID: </label><input type="text" id="id" name="id">`;
-            formSection.innerHTML += `<button type="button" onclick="getDoc()">Get</button>`;
+            button.textContent = 'Get';
+            formSection.appendChild(button);
             break;
         case "insert":
             generateInsertFormFields(formSection);
-            formSection.innerHTML += `<button type="button" onclick="insertRecord()">Insert</button>`;
+            button.textContent = 'Insert';
+            formSection.appendChild(button);
             break;
         case "update":
             generateInsertFormFields(formSection);
-            formSection.innerHTML += `<button type="button" onclick="edits()">Update</button>`;
+            button.textContent = 'Update';
+            formSection.appendChild(button);
             break;
         case "delete":
             generateInsertFormFields(formSection);
-
-            // formSection.innerHTML = `<label for="id">Enter ID: </label><input type="text" id="id" name="id">`;
-            formSection.innerHTML += `<button type="button" onclick="deleteRecord()">Delete</button>`;
+            button.textContent = 'Delete';
+            formSection.appendChild(button);
             break;
     }
 }
@@ -245,6 +251,7 @@ function generateInsertFormFields(formSection) {
               input.classList.add("input-field");
 
               input.type = "number";
+              input.step="any";
               input.name = field;
               break;
             case "date":
@@ -285,4 +292,43 @@ function generateInsertFormFields(formSection) {
         formSection.innerHTML = "No schema available for selected collection.";
       }
 }
+
+
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    // Process fields as JSON if they're valid
+    Object.keys(data).forEach(key => {
+        try {
+            const parsedValue = JSON.parse(data[key]);
+
+            // Check if parsed value is an object or array
+            if (typeof parsedValue === 'object' && parsedValue !== null) {
+                data[key] = parsedValue;
+            }
+        } catch {
+            // Not valid JSON, leave as is
+        }
+    });
+
+    let toSendData = {
+        "database":document.getElementById('database').value,
+        "collection":document.getElementById('collections').value,
+        "data":JSON.stringify(data)
+    }
+
+    let baseURL = "https://witsgobackend.azurewebsites.net/";
+    let endpoint = "v1/admin/"+currentAction+"_data";
+    let url = baseURL+endpoint;
+
+    if (currentAction=="get" || currentAction=="insert"){
+        const res = await axios.post(url,toSendData);
+        console.log(res);
+    }
+}
+
 

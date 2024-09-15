@@ -1,6 +1,0 @@
-{
-    "Maps": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
-    "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
-    "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"]
-  }
-  
