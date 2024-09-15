@@ -245,13 +245,14 @@ async function populateUpdate(event){
       headers: {
           'Content-Type': 'application/json'
       }});
-    
-    Object.keys(res.data.data).forEach((key)=>{
+      
+    const array = res.data.data[0];
+
+    Object.keys(array).forEach((key)=>{
       let element = document.getElementById(key);
       if (element!=null){
-        element.value=res.data.data[key];
+        element.value=array[key];
       }
-
     })
 }
 
