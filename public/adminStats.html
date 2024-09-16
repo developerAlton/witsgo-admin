@@ -8,7 +8,7 @@
 <body>
     <header>
         <h1 style="display: flex; align-items: center; justify-content: space-between;">
-            <img src="pfp.jpg" alt="Profile Picture" id="profilePicture">
+            <img src="profile.png" alt="Profile Picture" id="profilePicture">
             <span style="margin: auto;">Stats</span>
         </h1>
     </header>
@@ -18,17 +18,19 @@
         <a href="databasePage.html">Database</a>
     </nav>
 
-    <section id="stats-nav">
-        <nav>
-            <a href="#" onclick="showStats('monthly', 'Monthly Statistics')">Monthly</a>
-            <a href="#" onclick="showStats('yearly', 'Yearly Statistics')">Yearly</a>
-            <a href="#" onclick="showStats('custom', 'Custom Statistics')">Custom</a>
-        </nav>
-    </section>
-
     <section id="stats-display">
-        <h2 id="stats-title">Monthly Statistics</h2>
+        
         <section id="stats-content">
+            <h2 class="stats-title">Monthly Statistics</h2>
+
+            <section id="stats-nav">
+                <nav>
+                    <a href="#" onclick="showStats('monthly', 'Monthly Statistics')">Monthly</a>
+                    <a href="#" onclick="showStats('yearly', 'Yearly Statistics')">Yearly</a>
+                    <a href="#" onclick="showStats('custom', 'Custom Statistics')">Custom</a>
+                </nav>
+            </section>
+
             <section id="monthly" class="stats-page" style="display: none;">
                 <p>Content for Monthly Statistics</p>
             </section>

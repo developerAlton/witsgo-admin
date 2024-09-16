@@ -138,7 +138,6 @@ const collectionSchemas = {
   }
   ;
 
-
 // const baseURL = "https://witsgobackend.azurewebsites.net/";
 const baseURL = "http://localhost:3000/";
 
@@ -153,18 +152,13 @@ document.addEventListener('DOMContentLoaded', function () {
     defaultOption.text = '-- Select Database --';
     databaseDropdown.appendChild(defaultOption);
 
-    // Load databases into dropdown (currently only 'transportation')
-    const option = document.createElement('option');
-    option.value = 'transportation';
-    option.textContent = 'Transportation';
-
-
     for (const db in databases) {
         const option = document.createElement("option");
         option.value = db;
         option.text = db;
         databaseDropdown.appendChild(option);
-      }
+    }
+
     // Set the collection options when the database is selected
     databaseDropdown.addEventListener('change', updateCollections);
 });
@@ -174,17 +168,24 @@ function updateCollections() {
     const collectionsDropdown = document.getElementById('collections');
     collectionsDropdown.innerHTML = "";
 
+    // Clear the form section when the database is changed
+    const formSection = document.getElementById("actionForm");
+    formSection.innerHTML = ""; // Clear the form section
+
     const selectedDatabase = document.getElementById('database').value;
 
     if (collectionSchemas[selectedDatabase]) {
         for (const collection in collectionSchemas[selectedDatabase]) {
-          const option = document.createElement("option");
-          option.value = collection;
-          option.text = collection;
-          collectionsDropdown.appendChild(option);
+            const option = document.createElement("option");
+            option.value = collection;
+            option.text = collection;
+            collectionsDropdown.appendChild(option);
         }
-      }
+    }
 
+    // Reset the current collection and action
+    currentCollection = "";
+    currentAction = "";
 }
 
 // Set current action based on radio button selection
@@ -196,7 +197,6 @@ function setAction(action) {
 // Generate form inputs dynamically based on selected action and collection
 function generateForm() {
     const formSection = document.getElementById("actionForm");
-    formSection.addEventListener("submit",handleSubmit);
     formSection.innerHTML = "";
     currentCollection = document.getElementById("collections").value;
 
@@ -206,9 +206,7 @@ function generateForm() {
 
     let button = document.createElement('button');
     button.type = 'submit';
-    // button.addEventListener('click', handleSubmit);
 
-    // Generate form fields based on current action
     switch (currentAction) {
         case "get":
             generateInsertFormFields(formSection);
@@ -233,220 +231,223 @@ function generateForm() {
     }
 }
 
-
-async function populateUpdate(event){
-    let toSendData={
-      "database":document.getElementById('database').value,
-      "collection":document.getElementById('collections').value,
-      "data":{"_id":document.getElementById("_id").value}
+async function populateUpdate(event) {
+    let toSendData = {
+        "database": document.getElementById('database').value,
+        "collection": document.getElementById('collections').value,
+        "data": { "_id": document.getElementById("_id").value }
     }
 
-    const res = await axios.post(baseURL+"v1/admin/get_data",toSendData,{
-      headers: {
-          'Content-Type': 'application/json'
-      }});
-      
+    const res = await axios.post(baseURL + "v1/admin/get_data", toSendData, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
     const array = res.data.data[0];
 
-    Object.keys(array).forEach((key)=>{
-      let element = document.getElementById(key);
-      if (element!=null){
-        element.value=array[key];
-      }
+    Object.keys(array).forEach((key) => {
+        let element = document.getElementById(key);
+        if (element != null) {
+            element.value = array[key];
+        }
     })
 }
-
-
 
 // Generate form fields for inserting/updating data
 function generateInsertFormFields(formSection) {
     const dbSelect = document.getElementById("database").value;
-      const collectionSelect = document.getElementById("collections").value;
-      const schema = collectionSchemas[dbSelect] ? collectionSchemas[dbSelect][collectionSelect] : null;
+    const collectionSelect = document.getElementById("collections").value;
+    const schema = collectionSchemas[dbSelect] ? collectionSchemas[dbSelect][collectionSelect] : null;
 
-      formSection.innerHTML = ""; // Clear previous form fields
+    formSection.innerHTML = ""; // Clear previous form fields
 
-      if (currentAction=="update" || currentAction=="delete"){
+    if (currentAction == "update" || currentAction == "delete") {
         const label = document.createElement("label");
-        label.textContent = "_id:"
+        label.textContent = "_id:";
 
-        let input;
-
-        input = document.createElement("input");
+        let input = document.createElement("input");
         input.classList.add("input-field");
-        input.id="_id";
+        input.id = "_id";
         input.type = "text";
         input.name = "_id";
-        input.required=true;
-        input.addEventListener("blur",populateUpdate)
+        input.required = true;
+        input.addEventListener("blur", populateUpdate);
 
         formSection.appendChild(label);
         formSection.appendChild(input);
         formSection.appendChild(document.createElement("br"));
-      }
+    }
 
-
-
-      if (schema) {
+    if (schema) {
         for (const field in schema) {
-          const fieldInfo = schema[field];
-          const label = document.createElement("label");
-          label.textContent = `${field}: `;
+            const fieldInfo = schema[field];
+            const label = document.createElement("label");
+            label.textContent = `${field}: `;
 
-          let input;
+            let input;
 
-          switch (fieldInfo.type) {
-            case "string":
-              input = document.createElement("input");
-              input.classList.add("input-field");
-              input.type = "text";
-              input.name = field;
-              input.id = field;
-              break;
-            case "number":
-              input = document.createElement("input");
-              input.classList.add("input-field");
+            switch (fieldInfo.type) {
+                case "string":
+                    input = document.createElement("input");
+                    input.classList.add("input-field");
+                    input.type = "text";
+                    input.name = field;
+                    input.id = field;
+                    break;
+                case "number":
+                    input = document.createElement("input");
+                    input.classList.add("input-field");
+                    input.type = "number";
+                    input.step = "any";
+                    input.name = field;
+                    input.id = field;
+                    break;
+                case "date":
+                    input = document.createElement("input");
+                    input.classList.add("input-field");
+                    input.type = "date";
+                    input.name = field;
+                    input.id = field;
+                    break;
+                case "array":
+                    input = document.createElement("textarea");
+                    input.classList.add("input-field");
+                    input.placeholder = "Enter JSON array here";
+                    input.name = field;
+                    input.id = field;
+                    break;
+                case "object":
+                    input = document.createElement("textarea");
+                    input.classList.add("input-field");
+                    input.placeholder = "Enter JSON object here";
+                    input.name = field;
+                    input.id = field;
+                    break;
+                default:
+                    input = document.createElement("input");
+                    input.classList.add("input-field");
+                    input.type = "text";
+                    input.name = field;
+                    break;
+            }
 
-              input.type = "number";
-              input.step="any";
-              input.name = field;
-              input.id = field;
-              break;
-            case "date":
-              input = document.createElement("input");
-              input.classList.add("input-field");
-              input.type = "date";
-              input.name = field;
-              input.id = field;
-              break;
-            case "array":
-              input = document.createElement("textarea");
-              input.classList.add("input-field");
-              input.placeholder = "Enter JSON array here";
-              input.name = field;
-              input.id = field;
-              break;
-            case "object":
-              input = document.createElement("textarea");
-              input.classList.add("input-field");
-              input.placeholder = "Enter JSON object here";
-              input.name = field;
-              input.id = field;
-              break;
-            default:
-              input = document.createElement("input");
-              input.classList.add("input-field");
-              input.type = "text";
-              input.name = field;
-              break;
-          }
+            if (fieldInfo.required && currentAction == "insert") {
+                input.required = true;
+            }
 
-          if (fieldInfo.required && currentAction=="insert") {
-            input.required = true;
-          }
+            if (fieldInfo.default != undefined && currentAction != "get") {
+                input.value = fieldInfo.default;
+            }
 
-          if (fieldInfo.default!=undefined && currentAction!="get"){
-            input.value = fieldInfo.default;
-          }
-
-
-          formSection.appendChild(label);
-          formSection.appendChild(input);
-          formSection.appendChild(document.createElement("br"));
+            formSection.appendChild(label);
+            formSection.appendChild(input);
+            formSection.appendChild(document.createElement("br"));
         }
-      } else {
+    } else {
         formSection.innerHTML = "No schema available for selected collection.";
-      }
+    }
 }
-
-
 
 async function handleSubmit(event) {
     event.preventDefault();
-    
+
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
     let outputData = {};
 
-    // Process fields as JSON if they're valid
-    Object.keys(data).forEach((element)=>{
-      if (data[element].length!=0){
-        outputData[element] = data[element]
-      }
+    Object.keys(data).forEach((element) => {
+        if (data[element].length != 0) {
+            outputData[element] = data[element];
+        }
     })
 
-    
     let toSendData;
 
-    if (currentAction=="get"){
-      toSendData={
-        "database":document.getElementById('database').value,
-        "collection":document.getElementById('collections').value,
-        "data":outputData
-      }
-    }else{
-      toSendData={
-        "database":document.getElementById('database').value,
-        "collection":document.getElementById('collections').value,
-        "data":data
-      }
+    if (currentAction == "get") {
+        toSendData = {
+            "database": document.getElementById('database').value,
+            "collection": document.getElementById('collections').value,
+            "data": outputData
+        }
+    } else {
+        toSendData = {
+            "database": document.getElementById('database').value,
+            "collection": document.getElementById('collections').value,
+            "data": data
+        }
     }
 
+    let endpoint = "v1/admin/" + currentAction + "_data";
+    let url = baseURL + endpoint;
 
-    let endpoint = "v1/admin/"+currentAction+"_data";
-    let url = baseURL+endpoint;
+    if (currentAction == "get" || currentAction == "insert") {
+        try {
+            const res = await axios.post(url, toSendData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
+            let resData = JSON.stringify(res.data);
 
-    if (currentAction=="get" || currentAction=="insert"){
-      try{
-        const res = await axios.post(url,toSendData,{
-          headers: {
-              'Content-Type': 'application/json'
-          }
+            let outputText = document.getElementById("output");
+
+            // Clear output
+            while (outputText.firstChild) {
+                outputText.removeChild(outputText.firstChild)
+            }
+
+            let createText = document.createElement("p");
+            createText.textContent = resData;
+
+            outputText.appendChild(createText);
+        } catch (error) {
+            console.log(error);
+        }
+    } else if (currentAction == "update") {
+        const res = await axios.put(url, toSendData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         let resData = JSON.stringify(res.data);
 
         let outputText = document.getElementById("output");
 
-        //clear
-        while (outputText.firstChild){
-          outputText.removeChild(outputText.firstChild)
+        // Clear output
+        while (outputText.firstChild) {
+            outputText.removeChild(outputText.firstChild)
         }
 
         let createText = document.createElement("p");
-
-        createText.textContent=resData;
+        createText.textContent = resData;
 
         outputText.appendChild(createText);
-      }
-      catch(error){
-        console.log(error);
-      }
-    }
-    else if (currentAction="update"){
-        const res = await axios.put(url,toSendData,{
-          headers: {
-              'Content-Type': 'application/json'
-          }
+    } else if (currentAction == "delete") {
+        const res = await axios.delete(url, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: toSendData
         });
 
         let resData = JSON.stringify(res.data);
 
         let outputText = document.getElementById("output");
 
-        //clear
-        while (outputText.firstChild){
-          outputText.removeChild(outputText.firstChild)
+        // Clear output
+        while (outputText.firstChild) {
+            outputText.removeChild(outputText.firstChild)
         }
 
         let createText = document.createElement("p");
-
-        createText.textContent=resData;
+        createText.textContent = resData;
 
         outputText.appendChild(createText);
     }
 }
 
-
+document.getElementById('actionForm').addEventListener('submit', handleSubmit);

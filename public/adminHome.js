@@ -1,10 +1,12 @@
-const statsOverview = document.getElementById('card-display');
+// Select the first card with the class 'card-display' for the stats overview
+const statsOverview = document.querySelector('.card-display');
 
-//onclick go to adminStats.html
+// Onclick, go to adminStats.html
 statsOverview.addEventListener('click', function() {
     window.location.href = "adminStats.html";
 });
 
+// Sample rental data
 const sampleRentalData = [
     { _id: '1', vehicle: 'Bike1', userId: '2325733', rentalTime: '2024-09-10T10:30:00Z' },
     { _id: '2', vehicle: 'Scooter1', userId: '2345678', rentalTime: '2024-09-11T14:45:00Z' },
@@ -13,13 +15,13 @@ const sampleRentalData = [
     { _id: '5', vehicle: 'Scooter2', userId: '2222452', rentalTime: '2024-09-13T13:30:00Z' },
 ];
 
-
-
+// Display rental data when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     displayRentalData();
 });
 
 function displayRentalData() {
+    // Select the element with id 'logs'
     const overviewSection = document.querySelector('#logs');
     
     // Clear existing content
