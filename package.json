@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Prashant-Kessa/witsgo-admin/issues"
   },
-  "homepage": "https://github.com/Prashant-Kessa/witsgo-admin#readme"
+  "homepage": "https://github.com/Prashant-Kessa/witsgo-admin#readme",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
 }

@@ -20,6 +20,7 @@ const collectionSchemas = {
       "Building": {
         "building_name": { "type": "string", "required": true },
         "latitude": { "type": "number", "required": true },
+        "code": {"type":"string","required":false,"default":null},
         "longitude": { "type": "number", "required": true },
         "campus":{"type": "string","required": true},
         "type":{"type":"string","required":true,default:"building"},
@@ -120,7 +121,7 @@ const collectionSchemas = {
         "is_active": { "type": "boolean", "required": true },
       },
       "Vehicle": {
-        "barcode": { "type": "string", "unique": true, "required": true },
+        "vehicle_id": { "type": "string", "unique": true, "required": true },
         "type": { "type": "string", "required": true },
         "status": { "type": "string", "required": true},
         "current_station_id": { "type": "ObjectId", "ref": "Station", "required": true },
@@ -378,6 +379,9 @@ async function handleSubmit(event) {
             "data": data
         }
     }
+
+
+    console.log(toSendData);
 
     let endpoint = "v1/admin/" + currentAction + "_data";
     let url = baseURL + endpoint;
