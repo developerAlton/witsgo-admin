@@ -4,7 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"Error: no test specified\"",
+    "start": "node app.js",
+    "testing": "nodemon app.js",
+    "httpserver": "http-server -c -1 -S -C server.cert -K server.key -p 5000"
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,7 @@
   },
   "homepage": "https://github.com/Prashant-Kessa/witsgo-admin#readme",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.0"
   }
 }
