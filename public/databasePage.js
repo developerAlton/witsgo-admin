@@ -172,23 +172,27 @@ function updateCollections() {
     const defaultOption = document.createElement('option');
     defaultOption.text = '-- Select Collection --';
     collectionsDropdown.appendChild(defaultOption);
+    const actionSelection = document.getElementById("actionSelection");
+    actionSelection.style.visibility = "hidden";
+
+    const selectedDatabase = document.getElementById('database').value;
 
     const tableCard = document.getElementById("tableCard");
     tableCard.style.visibility = "hidden";
     
     const selectCollection = document.getElementById("selectCollection");
-    if(selectCollection){
-        selectCollection.style.visibility = "visible";
-    }
-    else if(document.getElementById("database").value == '-- Select Database --'){
+
+    if(selectedDatabase && selectedDatabase == '-- Select Database --'){ 
         selectCollection.style.visibility = "hidden";
+    } else if(selectCollection){
+        selectCollection.style.visibility = "visible";
     }
 
     // Clear the form section when the database is changed
     const formSection = document.getElementById("actionForm");
     formSection.innerHTML = ""; // Clear the form section
 
-    const selectedDatabase = document.getElementById('database').value;
+    
 
     if (collectionSchemas[selectedDatabase]) { // Check if the selected database has collections
         for (const collection in collectionSchemas[selectedDatabase]) {
@@ -211,16 +215,13 @@ function setAction(action) {
 }
 
 document.getElementById("collections").addEventListener("change", function() {
-    //const tableCard = document.getElementById("tableCard");
     const selectedCollection = document.getElementById("collections").value;
     const actionSelection = document.getElementById("actionSelection");
 
     // Make the table card visible if a collection is selected
-    if (selectedCollection) {
-        //tableCard.style.visibility = "visible";
+    if (selectedCollection && selectedCollection != '-- Select Collection --') {
         actionSelection.style.visibility = "visible";
     } else {
-        //tableCard.style.visibility = "hidden"; // Hide it if no collection is selected
         actionSelection.style.visibility = "hidden";
     }
 });
