@@ -166,8 +166,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Update collection dropdown based on selected database
 function updateCollections() {
+    clearRadioButtons(); // Clear radio buttons when the database is changed
     const collectionsDropdown = document.getElementById('collections');
     collectionsDropdown.innerHTML = "";
+    const defaultOption = document.createElement('option');
+    defaultOption.text = '-- Select Collection --';
+    collectionsDropdown.appendChild(defaultOption);
+
+    const tableCard = document.getElementById("tableCard");
+    tableCard.style.visibility = "hidden";
+    
+    const selectCollection = document.getElementById("selectCollection");
+    if(selectCollection){
+        selectCollection.style.visibility = "visible";
+    }
+    else if(document.getElementById("database").value == '-- Select Database --'){
+        selectCollection.style.visibility = "hidden";
+    }
 
     // Clear the form section when the database is changed
     const formSection = document.getElementById("actionForm");
@@ -175,7 +190,7 @@ function updateCollections() {
 
     const selectedDatabase = document.getElementById('database').value;
 
-    if (collectionSchemas[selectedDatabase]) {
+    if (collectionSchemas[selectedDatabase]) { // Check if the selected database has collections
         for (const collection in collectionSchemas[selectedDatabase]) {
             const option = document.createElement("option");
             option.value = collection;
@@ -195,9 +210,26 @@ function setAction(action) {
     generateForm();
 }
 
-// Generate form inputs dynamically based on selected action and collection
+document.getElementById("collections").addEventListener("change", function() {
+    //const tableCard = document.getElementById("tableCard");
+    const selectedCollection = document.getElementById("collections").value;
+    const actionSelection = document.getElementById("actionSelection");
+
+    // Make the table card visible if a collection is selected
+    if (selectedCollection) {
+        //tableCard.style.visibility = "visible";
+        actionSelection.style.visibility = "visible";
+    } else {
+        //tableCard.style.visibility = "hidden"; // Hide it if no collection is selected
+        actionSelection.style.visibility = "hidden";
+    }
+});
+
 function generateForm() {
+    //clearRadioButtons(); // Clear radio buttons when the action is changed
     const formSection = document.getElementById("actionForm");
+    const tableCard = document.getElementById("tableCard");
+    tableCard.style.visibility = "hidden";
     formSection.innerHTML = "";
     currentCollection = document.getElementById("collections").value;
 
@@ -230,7 +262,9 @@ function generateForm() {
             formSection.appendChild(button);
             break;
     }
+    formSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
+
 
 async function populateUpdate(event) {
     let toSendData = {
@@ -355,6 +389,7 @@ async function handleSubmit(event) {
 
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
+    const tableCard = document.getElementById("tableCard");
 
     let outputData = {};
 
@@ -372,12 +407,14 @@ async function handleSubmit(event) {
             "collection": document.getElementById('collections').value,
             "data": outputData
         }
+        tableCard.style.visibility = "visible";
     } else {
         toSendData = {
             "database": document.getElementById('database').value,
             "collection": document.getElementById('collections').value,
             "data": data
         }
+        tableCard.style.visibility = "hidden";
     }
 
 
@@ -393,20 +430,26 @@ async function handleSubmit(event) {
                     'Content-Type': 'application/json'
                 }
             });
-
-            let resData = JSON.stringify(res.data);
-
+    
+            // Use JSON.stringify with spacing for pretty formatting
+            let resData = JSON.stringify(res.data, null, 2); // 2 is the number of spaces for indentation
+    
             let outputText = document.getElementById("output");
-
+    
             // Clear output
             while (outputText.firstChild) {
-                outputText.removeChild(outputText.firstChild)
+                outputText.removeChild(outputText.firstChild);
             }
-
-            let createText = document.createElement("p");
+    
+            let createText = document.createElement("pre"); // Use <pre> for preformatted text
             createText.textContent = resData;
-
+    
             outputText.appendChild(createText);
+    
+            if(currentAction == "get") {
+                tableCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+    
         } catch (error) {
             console.log(error);
         }
@@ -455,3 +498,10 @@ async function handleSubmit(event) {
 }
 
 document.getElementById('actionForm').addEventListener('submit', handleSubmit);
+
+function clearRadioButtons() {
+    const radios = document.querySelectorAll('#actionSelection input[name="action"]');
+    radios.forEach(radio => {
+        radio.checked = false; // Uncheck each radio button
+    });
+}

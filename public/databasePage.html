@@ -32,14 +32,14 @@
                 </select>
             </div>
 
-            <div id="selectCollection">
+            <div id="selectCollection" style="visibility: hidden;">
                 <label for="collections">Select Collection: </label>
                 <select id="collections" onchange="generateForm()">
                 </select>
             </div>
 
             <!-- Radio buttons to select action -->
-            <div id="actionSelection">
+            <div id="actionSelection" style="visibility: hidden;">
                 <p>Select Action:</p>
                 <label>
                     <input type="radio" name="action" value="get" onclick="setAction('get')"> Get
@@ -62,11 +62,17 @@
                 </form>
             </div>
 
-            <article id="output"></article>
-
         </section>
     </section>
 
+    <section class="card-display" id="tableCard" style="visibility: hidden;">
+        <section class="card-content">
+            <h2 class="card-title">Data</h2>
+            <section id="table">
+                <article id="output"></article>
+            </section>
+        </section>
+    </section>
     
 </body>
 </html>
