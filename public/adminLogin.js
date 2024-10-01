@@ -33,7 +33,8 @@ form.addEventListener('submit', async (event) => {
 
 
     } catch (error) {
-        
+
+
         if (error.response.status === 401) {
             alert('Invalid email or password');
         } else if (error.response.status === 404) {
