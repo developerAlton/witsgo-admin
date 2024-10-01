@@ -1,10 +1,8 @@
 // databasePage.js
 const databases = {
     "Map": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
-    "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
     "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"],
-    "Accessibility":["AccessibleRoute","Location"],
-    "RentalService":["Rental","Vehicle","Station","Student"]
+    "Accessibility":["AccessibleRoute","Location"]
 };
 
 
@@ -25,22 +23,12 @@ const collectionSchemas = {
         "campus":{"type": "string","required": true},
         "type":{"type":"string","required":true,default:"building"},
       },
-      "PointOfInterest": {
-        "poi_name": { "type": "string", "required": true },
-        "latitude": { "type": "number", "required": true },
-        "longitude": { "type": "number", "required": true },
-      },
       "Room": {
         "room_name": { "type": "string", "required": true },
         "code":{"type":"string","required": true},
         "type":{"type":"string","required":true},
         "building_id": { "type": "string", "required": true },
       },
-      "Route": {
-        "route_name": { "type": "string", "required": true },
-        "distance": { "type": "number", "required": true },
-        "estimated_time": { "type": "number", "required": true },
-      }
     },
     "Transportation": {
       "Route": {
@@ -90,19 +78,9 @@ const collectionSchemas = {
         "end_location": { "type": "object", "required": true },
         "duration": { "type": "number", "required": true },
         "route_data": { "type": "string", "required": true },
-      },
-      "User": {
-        "user_id": { "type": "string", "required": true },
-        "user_name": { "type": "string", "required": true },
-        "email": { "type": "string", "required": true }
       }
     },
     "Accessibility": {
-      "AccessibleRoute": {
-        "route_name": { "type": "string", "required": true },
-        "location_id": { "type": "ObjectId", "ref": "Location", "required": true },
-        "created_at": { "type": "date", "default": Date.now }
-      },
       "Location": {
         "name": { "type": "string", "required": true },
         "latitude": { "type": "number", "required": true },
@@ -136,8 +114,7 @@ const collectionSchemas = {
         "rented_vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
       }
     }
-  }
-  ;
+  };
 
 const baseURL = "https://witsgobackend.azurewebsites.net/";
 // const baseURL = "http://localhost:3000/";
@@ -177,8 +154,8 @@ function updateCollections() {
 
     const selectedDatabase = document.getElementById('database').value;
 
-    const tableCard = document.getElementById("tableCard");
-    tableCard.style.visibility = "hidden";
+    const cardsContainer = document.getElementById("cardsContainer");
+    cardsContainer.style.visibility = "hidden";
     
     const selectCollection = document.getElementById("selectCollection");
 
@@ -229,8 +206,8 @@ document.getElementById("collections").addEventListener("change", function() {
 function generateForm() {
     //clearRadioButtons(); // Clear radio buttons when the action is changed
     const formSection = document.getElementById("actionForm");
-    const tableCard = document.getElementById("tableCard");
-    tableCard.style.visibility = "hidden";
+    const cardsContainer = document.getElementById("cardsContainer");
+    cardsContainer.style.visibility = "hidden";
     formSection.innerHTML = "";
     currentCollection = document.getElementById("collections").value;
 
@@ -390,7 +367,7 @@ async function handleSubmit(event) {
 
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-    const tableCard = document.getElementById("tableCard");
+    const cardsContainer = document.getElementById('cardsContainer');
 
     let outputData = {};
 
@@ -398,105 +375,78 @@ async function handleSubmit(event) {
         if (data[element].length != 0) {
             outputData[element] = data[element];
         }
-    })
+    });
 
-    let toSendData;
-
-    if (currentAction == "get") {
-        toSendData = {
-            "database": document.getElementById('database').value,
-            "collection": document.getElementById('collections').value,
-            "data": outputData
-        }
-        tableCard.style.visibility = "visible";
-    } else {
-        toSendData = {
-            "database": document.getElementById('database').value,
-            "collection": document.getElementById('collections').value,
-            "data": data
-        }
-        tableCard.style.visibility = "hidden";
-    }
-
+    let toSendData = {
+        "database": document.getElementById('database').value,
+        "collection": document.getElementById('collections').value,
+        "data": outputData
+    };
 
     console.log(toSendData);
 
     let endpoint = "v1/admin/" + currentAction + "_data";
     let url = baseURL + endpoint;
 
-    if (currentAction == "get" || currentAction == "insert") {
-        try {
-            const res = await axios.post(url, toSendData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-    
-            // Use JSON.stringify with spacing for pretty formatting
-            let resData = JSON.stringify(res.data, null, 2); // 2 is the number of spaces for indentation
-    
-            let outputText = document.getElementById("output");
-    
-            // Clear output
-            while (outputText.firstChild) {
-                outputText.removeChild(outputText.firstChild);
-            }
-    
-            let createText = document.createElement("pre"); // Use <pre> for preformatted text
-            createText.textContent = resData;
-    
-            outputText.appendChild(createText);
-    
-            if(currentAction == "get") {
-                tableCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-    
-        } catch (error) {
-            console.log(error);
-        }
-    } else if (currentAction == "update") {
-        const res = await axios.put(url, toSendData, {
+    try {
+        const res = await axios.post(url, toSendData, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
-        let resData = JSON.stringify(res.data);
+        // Clear previous cards
+        cardsContainer.innerHTML = "";
+        cardsContainer.style.visibility = "visible";
 
-        let outputText = document.getElementById("output");
-
-        // Clear output
-        while (outputText.firstChild) {
-            outputText.removeChild(outputText.firstChild)
-        }
-
-        let createText = document.createElement("p");
-        createText.textContent = resData;
-
-        outputText.appendChild(createText);
-    } else if (currentAction == "delete") {
-        const res = await axios.delete(url, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: toSendData
+        res.data.data.forEach(item => {
+            let card = createCard(item);
+            cardsContainer.appendChild(card);
         });
 
-        let resData = JSON.stringify(res.data);
+        // Scroll to the newly added content
+        cardsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        let outputText = document.getElementById("output");
-
-        // Clear output
-        while (outputText.firstChild) {
-            outputText.removeChild(outputText.firstChild)
-        }
-
-        let createText = document.createElement("p");
-        createText.textContent = resData;
-
-        outputText.appendChild(createText);
+    } catch (error) {
+        console.log(error);
     }
 }
+
+// Function to dynamically create a card for any object
+function createCard(dataObj) {
+    let card = document.createElement("section");
+    card.className = "data-card-display";
+
+    let cardContent = document.createElement("section");
+    cardContent.className = "card-content";
+
+    let cardTitle = document.createElement("h2");
+    cardTitle.className = "card-title";
+    cardTitle.textContent = "Data";
+
+    let tableSection = document.createElement("section");
+    tableSection.id = "table";
+
+    let article = document.createElement("article");
+    article.id = "output";
+
+    // Iterate through the object and display each key-value pair
+    for (let [key, value] of Object.entries(dataObj)) {
+        let p = document.createElement("p");
+        p.textContent = `${key}: ${value}`;
+        article.appendChild(p);
+    }
+
+    tableSection.appendChild(article);
+    //cardContent.appendChild(cardTitle);
+    cardContent.appendChild(tableSection);
+    card.appendChild(cardContent);
+
+    return card;
+}
+
+
+
 
 document.getElementById('actionForm').addEventListener('submit', handleSubmit);
 

@@ -63,12 +63,8 @@ header img#profilePicture {
     color: #ddd;
 }
 
-.card-nav {
-    text-align: center;
-    margin: 30px auto;
-    font-size: 20px;
-}
 
+/* Main card (for database selection) */
 .card-display {
     flex: 1;
     display: flex;
@@ -76,13 +72,6 @@ header img#profilePicture {
     width: 85%;
     max-width: 1000px;
     margin: 30px auto;
-    
-}
-
-.card-title {
-    text-align: center;
-    font-size: 26px;
-    margin: 0 0 15px 20px;
 }
 
 .card-content {
@@ -98,6 +87,27 @@ header img#profilePicture {
     display: flex;
     flex-direction: column;
 }
+
+/* Data cards (for generated data) */
+.data-card-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 70%; /* Make it smaller than the main card */
+    max-width: 600px;
+    margin: 20px auto; /* Slightly smaller margin */
+}
+
+.data-card-content {
+    flex: 1;
+    width: calc(100% - 20px); /* Less width compared to the main card */
+    padding: 15px; /* Smaller padding for the content */
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); /* Softer shadow */
+    font-size: 14px; /* Smaller text size */
+}
+
 
 #selectDb {
     display: flex;
