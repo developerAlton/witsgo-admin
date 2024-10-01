@@ -1,11 +1,3 @@
-// Select the first card with the class 'card-display' for the stats overview
-const statsOverview = document.querySelector('.card-display');
-
-// Onclick, go to adminStats.html
-statsOverview.addEventListener('click', function() {
-    window.location.href = "adminStats.html";
-});
-
 // Sample rental data
 const sampleRentalData = [
     { _id: '1', vehicle: 'Bike1', userId: '2325733', rentalTime: '2024-09-10T10:30:00Z' },
