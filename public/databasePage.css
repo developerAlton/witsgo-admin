@@ -127,12 +127,10 @@ header img#profilePicture {
 
 /* Data cards (for generated data) */
 .data-card-display {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    width: 70%; /* Make it smaller than the main card */
-    max-width: 600px;
-    margin: 20px auto; /* Slightly smaller margin */
+    flex: 0 1 calc(30% - 20px); /* Adjust the width of each card */
+    margin: 10px; /* Space between cards */
+    min-width: 200px; /* Ensure cards do not get too small */
+    max-width: 300px; /* Limit the maximum width */
 }
 
 .data-card-content {
@@ -143,6 +141,13 @@ header img#profilePicture {
     border-radius: 10px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); /* Softer shadow */
     font-size: 14px; /* Smaller text size */
+}
+
+#dataCardsContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap onto the next line */
+    justify-content: center; /* Space out the cards evenly */
+    padding: 20px; /* Add some padding around the container */
 }
 
 #selectDb {

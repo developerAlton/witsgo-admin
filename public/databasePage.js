@@ -161,8 +161,8 @@ function updateCollections() {
 
     const selectedDatabase = document.getElementById('database').value;
 
-    const cardsContainer = document.getElementById("cardsContainer");
-    cardsContainer.style.visibility = "hidden";
+    const dataCardsContainer = document.getElementById("dataCardsContainer");
+    dataCardsContainer.style.visibility = "hidden";
     
     const selectCollection = document.getElementById("selectCollection");
 
@@ -213,8 +213,8 @@ document.getElementById("collections").addEventListener("change", function() {
 function generateForm() {
     //clearRadioButtons(); // Clear radio buttons when the action is changed
     const formSection = document.getElementById("actionForm");
-    const cardsContainer = document.getElementById("cardsContainer");
-    cardsContainer.style.visibility = "hidden";
+    const dataCardsContainer = document.getElementById("dataCardsContainer");
+    dataCardsContainer.style.visibility = "hidden";
     formSection.innerHTML = "";
     currentCollection = document.getElementById("collections").value;
 
@@ -374,7 +374,7 @@ async function handleSubmit(event) {
 
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-    const cardsContainer = document.getElementById('cardsContainer');
+    const dataCardsContainer = document.getElementById('dataCardsContainer');
 
     let outputData = {};
 
@@ -403,16 +403,16 @@ async function handleSubmit(event) {
         });
 
         // Clear previous cards
-        cardsContainer.innerHTML = "";
-        cardsContainer.style.visibility = "visible";
+        dataCardsContainer.innerHTML = "";
+        dataCardsContainer.style.visibility = "visible";
 
         res.data.data.forEach(item => {
             let card = createCard(item);
-            cardsContainer.appendChild(card);
+            dataCardsContainer.appendChild(card);
         });
 
         // Scroll to the newly added content
-        cardsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        dataCardsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     } catch (error) {
         console.log(error);
