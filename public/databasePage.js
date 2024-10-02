@@ -66,25 +66,11 @@ const collectionSchemas = {
       }
     },
     "UserRoutes": {
-      "NavigationHistory": {
-        "history_id": { "type": "string", "required": true },
-        "route_id": { "type": "string", "required": true },
-        "start_time": { "type": "date", "required": true },
-        "end_time": { "type": "date", "required": true },
-      },
       "Preferences": {
         "preference_id": { "type": "string", "required": true },
         "user_id": { "type": "string", "required": true },
         "preferences_type": { "type": "string", "enum": ["wheelchair", "tolls_free", "none"], "required": true },
         "preferences_value": { "type": "boolean", "required": true },
-      },
-      "Routes": {
-        "route_id": { "type": "string", "required": true },
-        "user_id": { "type": "string", "required": true },
-        "start_location": { "type": "object", "required": true },
-        "end_location": { "type": "object", "required": true },
-        "duration": { "type": "number", "required": true },
-        "route_data": { "type": "string", "required": true },
       }
     },
     "Accessibility": {

@@ -22,12 +22,25 @@ const sampleRentalData = [
     { _id: '20', vehicle: 'Scooter7', userId: '2345678', rentalTime: '2024-09-28T14:45:00Z' }
 ];
 
-// Display rental data when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    displayRentalData();
-});
+const baseURL = "https://witsgobackend.azurewebsites.net/";
+// const baseURL = "http://localhost:3000/";
 
-function displayRentalData() {
+async function getRentalData() {
+    let endpoint = "v1/rental/rentals";
+    let url = baseURL + endpoint;
+
+    try {
+        const response = await axios.get(url);
+        console.log(response.data);
+        // Call displayRentalData with the rental_logs
+        displayRentalData(response.data.rental_logs);
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+function displayRentalData(rentalData) {
     // Select the element with id 'logs'
     const overviewSection = document.querySelector('#logs');
     
@@ -39,7 +52,7 @@ function displayRentalData() {
     table.classList.add('rental-table');
 
     // Create table headers
-    const headers = ['Rental', 'Student Number', 'Date'];
+    const headers = ['Email', 'First Name', 'Last Name', 'Vehicle Type', 'Station Name', 'Rented At', 'Returned At'];
     const headerRow = document.createElement('tr');
     headers.forEach(headerText => {
         const th = document.createElement('th');
@@ -48,22 +61,38 @@ function displayRentalData() {
     });
     table.appendChild(headerRow);
 
-    // Populate table rows with sample data
-    sampleRentalData.forEach(rental => {
+    // Populate table rows with rental data
+    rentalData.forEach(rental => {
         const row = document.createElement('tr');
-        
-        const vehicleCell = document.createElement('td');
-        vehicleCell.textContent = rental.vehicle;
-        row.appendChild(vehicleCell);
-        
-        const userIdCell = document.createElement('td');
-        userIdCell.textContent = rental.userId;
-        row.appendChild(userIdCell);
-        
-        const rentalTimeCell = document.createElement('td');
-        rentalTimeCell.textContent = new Date(rental.rentalTime).toLocaleString();
-        row.appendChild(rentalTimeCell);
-        
+
+        const emailCell = document.createElement('td');
+        emailCell.textContent = rental.email;
+        row.appendChild(emailCell);
+
+        const firstNameCell = document.createElement('td');
+        firstNameCell.textContent = rental.first_name;
+        row.appendChild(firstNameCell);
+
+        const lastNameCell = document.createElement('td');
+        lastNameCell.textContent = rental.last_name;
+        row.appendChild(lastNameCell);
+
+        const vehicleTypeCell = document.createElement('td');
+        vehicleTypeCell.textContent = rental.vehicle_type;
+        row.appendChild(vehicleTypeCell);
+
+        const stationNameCell = document.createElement('td');
+        stationNameCell.textContent = rental.station_name;
+        row.appendChild(stationNameCell);
+
+        const rentedAtCell = document.createElement('td');
+        rentedAtCell.textContent = new Date(rental.rentedAt).toLocaleString();
+        row.appendChild(rentedAtCell);
+
+        const returnedAtCell = document.createElement('td');
+        returnedAtCell.textContent = rental.returnedAt ? new Date(rental.returnedAt).toLocaleString() : 'Not Returned';
+        row.appendChild(returnedAtCell);
+
         table.appendChild(row);
     });
 
@@ -76,3 +105,6 @@ const logoutButton = document.getElementById('logoutButton');
 logoutButton.addEventListener('click', function() {
     window.location.href = 'index.html';
 });
+
+// Call getRentalData function
+getRentalData();

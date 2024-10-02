@@ -105,6 +105,7 @@ header img#profilePicture {
     flex-direction: column;
     width: 85%;
     max-width: 1000px;
+    height: auto;
     margin: 30px auto;
 }
 
@@ -115,18 +116,17 @@ header img#profilePicture {
 }
 
 .card-content {
-    flex: 1;
+    min-height: 150px; /* Start with a small height */
     width: calc(100% - 40px);
-    height: 100%;
+    padding: 20px;
     border: 1px solid #ccc;
     border-radius: 15px;
     overflow: hidden;
-    padding: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    
+    transition: all 0.3s ease-in-out; /* Smooth growing animation */
 }
 
 

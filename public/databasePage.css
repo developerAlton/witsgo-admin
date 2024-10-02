@@ -120,9 +120,11 @@ header img#profilePicture {
     min-height: auto; /* Remove fixed min-height to grow with content */
 }
 
-.card-content h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+
+.card-title {
+    text-align: center;
+    font-size: 26px;
+    margin: 0 0 15px 20px;
 }
 
 /* Data cards (for generated data) */
