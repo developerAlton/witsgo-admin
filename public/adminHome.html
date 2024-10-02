@@ -4,29 +4,25 @@
     <title>Home</title>
     <link rel="stylesheet" href="adminHome.css">
     <script src="adminHome.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1 style="display: flex; align-items: center; justify-content: space-between;">
-            <img src="profile.png" alt="Profile Picture" id="profilePicture">
-            <span style="margin: auto;">Home</span>
-        </h1>
-    </header>
-
-    <nav class = "topNav">
-        <a href="adminHome.html">Home</a>
-        <a href="databasePage.html">Database</a>
-    </nav>
-
-    <section class="card-display" style="cursor: pointer;">
+    <div id="header-container">
+        <header>
+            <div id="header-content">
+                <img src="profile.png" alt="Profile Picture" id="profilePicture">
+                <h2>Home</h2>
+            </div>
+            <button id="logoutButton">Logout</button>
+        </header>
         
-        <section class="card-content">
-            <h2 class="card-title">Overview of Statistics</h2>
-            <section id="stats" class="card-page">
-                <p>Content for Overview Statistics</p>
-            </section>
-        </section>
-    </section>
+        <nav class="topNav">
+            <a href="adminHome.html">Home</a>
+            <a href="databasePage.html">Database</a>
+        </nav>
+    </div>
+    
+    
     
     <section class="card-display">
         <section class="card-content">
