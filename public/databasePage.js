@@ -3,144 +3,144 @@ const databases = {
     "Map": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
     "Transportation": ["Route", "Schedule", "Stop", "Tracking", "Vehicle"],
     "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"],
-    "Accessibility":["AccessibleRoute","Location"],
-    "RentalService":["Rental","Vehicle","Station","Student"]
+    "Accessibility": ["AccessibleRoute", "Location"],
+    "RentalService": ["Rental", "Vehicle", "Station", "Student"]
 };
 
 
 const collectionSchemas = {
-    
+
     "Map": {
-      "Amenity": {
-        "amenity_type": { "type": "string", "required": true },
-        "building_id": { "type": "string", "required": true },
-        "latitude": { "type": "number", "required": true },
-        "longitude": { "type": "number", "required": true },
-      },
-      "Building": {
-        "building_name": { "type": "string", "required": true },
-        "latitude": { "type": "number", "required": true },
-        "code": {"type":"string","required":false,"default":null},
-        "longitude": { "type": "number", "required": true },
-        "campus":{"type": "string","required": true},
-        "type":{"type":"string","required":true,default:"building"},
-      },
-      "PointOfInterest": {
-        "poi_name": { "type": "string", "required": true },
-        "latitude": { "type": "number", "required": true },
-        "longitude": { "type": "number", "required": true },
-      },
-      "Room": {
-        "room_name": { "type": "string", "required": true },
-        "code":{"type":"string","required": true},
-        "type":{"type":"string","required":true},
-        "building_id": { "type": "string", "required": true },
-      },
-      "Route": {
-        "route_name": { "type": "string", "required": true },
-        "distance": { "type": "number", "required": true },
-        "estimated_time": { "type": "number", "required": true },
-      }
+        "Amenity": {
+            "amenity_type": { "type": "string", "required": true },
+            "building_id": { "type": "string", "required": true },
+            "latitude": { "type": "number", "required": true },
+            "longitude": { "type": "number", "required": true },
+        },
+        "Building": {
+            "building_name": { "type": "string", "required": true },
+            "latitude": { "type": "number", "required": true },
+            "code": { "type": "string", "required": false, "default": null },
+            "longitude": { "type": "number", "required": true },
+            "campus": { "type": "string", "required": true },
+            "type": { "type": "string", "required": true, default: "building" },
+        },
+        "PointOfInterest": {
+            "poi_name": { "type": "string", "required": true },
+            "latitude": { "type": "number", "required": true },
+            "longitude": { "type": "number", "required": true },
+        },
+        "Room": {
+            "room_name": { "type": "string", "required": true },
+            "code": { "type": "string", "required": true },
+            "type": { "type": "string", "required": true },
+            "building_id": { "type": "string", "required": true },
+        },
+        "Route": {
+            "route_name": { "type": "string", "required": true },
+            "distance": { "type": "number", "required": true },
+            "estimated_time": { "type": "number", "required": true },
+        }
     },
     "Transportation": {
-      "Route": {
-        "route_name": { "type": "string", "required": true },
-        "stops": { "type": "array", "required": true }
-      },
-      "Schedule": {
-        "route_id": { "type": "string", "required": true },
-        "stop_id": { "type": "string", "required": true },
-        "arrival_time": { "type": "date", "required": true },
-        "departure_time": { "type": "date", "required": true }
-      },
-      "Stop": {
-        "stop_name": { "type": "string", "required": true },
-        "location": { "type": "string", "required": true }
-      },
-      "Tracking": {
-        "vehicle_id": { "type": "string", "required": true },
-        "route_id": { "type": "string", "required": true },
-        "current_stop_id": { "type": "string", "required": true },
-        "timestamp": { "type": "date", "required": true },
-        "latitude": { "type": "number", "required": true },
-        "longitude": { "type": "number", "required": true }
-      },
-      "Vehicle": {
-        "vehicle_number": { "type": "string", "required": true },
-        "vehicle_type": { "type": "string", "required": true }
-      }
+        "Route": {
+            "route_name": { "type": "string", "required": true },
+            "stops": { "type": "array", "required": true }
+        },
+        "Schedule": {
+            "route_id": { "type": "string", "required": true },
+            "stop_id": { "type": "string", "required": true },
+            "arrival_time": { "type": "date", "required": true },
+            "departure_time": { "type": "date", "required": true }
+        },
+        "Stop": {
+            "stop_name": { "type": "string", "required": true },
+            "location": { "type": "string", "required": true }
+        },
+        "Tracking": {
+            "vehicle_id": { "type": "string", "required": true },
+            "route_id": { "type": "string", "required": true },
+            "current_stop_id": { "type": "string", "required": true },
+            "timestamp": { "type": "date", "required": true },
+            "latitude": { "type": "number", "required": true },
+            "longitude": { "type": "number", "required": true }
+        },
+        "Vehicle": {
+            "vehicle_number": { "type": "string", "required": true },
+            "vehicle_type": { "type": "string", "required": true }
+        }
     },
     "UserRoutes": {
-      "NavigationHistory": {
-        "history_id": { "type": "string", "required": true },
-        "route_id": { "type": "string", "required": true },
-        "start_time": { "type": "date", "required": true },
-        "end_time": { "type": "date", "required": true },
-      },
-      "Preferences": {
-        "preference_id": { "type": "string", "required": true },
-        "user_id": { "type": "string", "required": true },
-        "preferences_type": { "type": "string", "enum": ["wheelchair", "tolls_free", "none"], "required": true },
-        "preferences_value": { "type": "boolean", "required": true },
-      },
-      "Routes": {
-        "route_id": { "type": "string", "required": true },
-        "user_id": { "type": "string", "required": true },
-        "start_location": { "type": "object", "required": true },
-        "end_location": { "type": "object", "required": true },
-        "duration": { "type": "number", "required": true },
-        "route_data": { "type": "string", "required": true },
-      },
-      "User": {
-        "user_id": { "type": "string", "required": true },
-        "user_name": { "type": "string", "required": true },
-        "email": { "type": "string", "required": true }
-      }
+        "NavigationHistory": {
+            "history_id": { "type": "string", "required": true },
+            "route_id": { "type": "string", "required": true },
+            "start_time": { "type": "date", "required": true },
+            "end_time": { "type": "date", "required": true },
+        },
+        "Preferences": {
+            "preference_id": { "type": "string", "required": true },
+            "user_id": { "type": "string", "required": true },
+            "preferences_type": { "type": "string", "enum": ["wheelchair", "tolls_free", "none"], "required": true },
+            "preferences_value": { "type": "boolean", "required": true },
+        },
+        "Routes": {
+            "route_id": { "type": "string", "required": true },
+            "user_id": { "type": "string", "required": true },
+            "start_location": { "type": "object", "required": true },
+            "end_location": { "type": "object", "required": true },
+            "duration": { "type": "number", "required": true },
+            "route_data": { "type": "string", "required": true },
+        },
+        "User": {
+            "user_id": { "type": "string", "required": true },
+            "user_name": { "type": "string", "required": true },
+            "email": { "type": "string", "required": true }
+        }
     },
     "Accessibility": {
-      "AccessibleRoute": {
-        "route_name": { "type": "string", "required": true },
-        "location_id": { "type": "ObjectId", "ref": "Location", "required": true },
-        "created_at": { "type": "date", "default": Date.now }
-      },
-      "Location": {
-        "name": { "type": "string", "required": true },
-        "latitude": { "type": "number", "required": true },
-        "longitude": { "type": "number", "required": true },
-        "wheelchair_friendly": { "type": "boolean", "default": false },
-        "ramp_available": { "type": "boolean", "default": false },
-        "elevator_nearby": { "type": "boolean", "default": false },
-      }
+        "AccessibleRoute": {
+            "route_name": { "type": "string", "required": true },
+            "location_id": { "type": "ObjectId", "ref": "Location", "required": true },
+            "created_at": { "type": "date", "default": Date.now }
+        },
+        "Location": {
+            "name": { "type": "string", "required": true },
+            "latitude": { "type": "number", "required": true },
+            "longitude": { "type": "number", "required": true },
+            "wheelchair_friendly": { "type": "boolean", "default": false },
+            "ramp_available": { "type": "boolean", "default": false },
+            "elevator_nearby": { "type": "boolean", "default": false },
+        }
     },
     "RentalService": {
-      "Rental": {
-        "student_id": { "type": "ObjectId", "ref": "Student", "required": true },
-        "vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
-        "rental_start_time": { "type": "date", "required": true },
-        "rental_end_time": { "type": "date", "required": true },
-        "is_active": { "type": "boolean", "required": true },
-      },
-      "Vehicle": {
-        "vehicle_id": { "type": "string", "unique": true, "required": true },
-        "type": { "type": "string", "required": true },
-        "status": { "type": "string", "required": true},
-        "current_station_id": { "type": "ObjectId", "ref": "Station", "required": true },
-      },
-      "Station": {
-        "location": { "type": "string", "required": true },
-      },
-      "Student": {
-        "student_number": { "type": "string", "unique": true, "required": true },
-        "name": { "type": "string", "required": true },
-        "email": { "type": "string", "unique": true, "required": true },
-        "rented_vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
-      }
+        "Rental": {
+            "student_id": { "type": "ObjectId", "ref": "Student", "required": true },
+            "vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
+            "rental_start_time": { "type": "date", "required": true },
+            "rental_end_time": { "type": "date", "required": true },
+            "is_active": { "type": "boolean", "required": true },
+        },
+        "Vehicle": {
+            "vehicle_id": { "type": "string", "unique": true, "required": true },
+            "type": { "type": "string", "required": true },
+            "status": { "type": "string", "required": true },
+            "current_station_id": { "type": "ObjectId", "ref": "Station", "required": true },
+        },
+        "Station": {
+            "location": { "type": "string", "required": true },
+        },
+        "Student": {
+            "student_number": { "type": "string", "unique": true, "required": true },
+            "name": { "type": "string", "required": true },
+            "email": { "type": "string", "unique": true, "required": true },
+            "rented_vehicle_id": { "type": "ObjectId", "ref": "Vehicle", "required": true },
+        }
     }
-  }
-  ;
+}
+    ;
 
-const baseURL = "https://witsgobackend.azurewebsites.net/";
-// const baseURL = "http://localhost:3000/";
+// const baseURL = "https://witsgobackend.azurewebsites.net/";
+const baseURL = "http://localhost:3000/";
 
 // State to track current action and collection
 let currentAction = "";
@@ -179,12 +179,12 @@ function updateCollections() {
 
     const tableCard = document.getElementById("tableCard");
     tableCard.style.visibility = "hidden";
-    
+
     const selectCollection = document.getElementById("selectCollection");
 
-    if(selectedDatabase && selectedDatabase == '-- Select Database --'){ 
+    if (selectedDatabase && selectedDatabase == '-- Select Database --') {
         selectCollection.style.visibility = "hidden";
-    } else if(selectCollection){
+    } else if (selectCollection) {
         selectCollection.style.visibility = "visible";
     }
 
@@ -192,7 +192,7 @@ function updateCollections() {
     const formSection = document.getElementById("actionForm");
     formSection.innerHTML = ""; // Clear the form section
 
-    
+
 
     if (collectionSchemas[selectedDatabase]) { // Check if the selected database has collections
         for (const collection in collectionSchemas[selectedDatabase]) {
@@ -214,7 +214,7 @@ function setAction(action) {
     generateForm();
 }
 
-document.getElementById("collections").addEventListener("change", function() {
+document.getElementById("collections").addEventListener("change", function () {
     const selectedCollection = document.getElementById("collections").value;
     const actionSelection = document.getElementById("actionSelection");
 
@@ -431,26 +431,26 @@ async function handleSubmit(event) {
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             // Use JSON.stringify with spacing for pretty formatting
             let resData = JSON.stringify(res.data, null, 2); // 2 is the number of spaces for indentation
-    
+
             let outputText = document.getElementById("output");
-    
+
             // Clear output
             while (outputText.firstChild) {
                 outputText.removeChild(outputText.firstChild);
             }
-    
+
             let createText = document.createElement("pre"); // Use <pre> for preformatted text
             createText.textContent = resData;
-    
+
             outputText.appendChild(createText);
-    
-            if(currentAction == "get") {
+
+            if (currentAction == "get") {
                 tableCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-    
+
         } catch (error) {
             console.log(error);
         }
