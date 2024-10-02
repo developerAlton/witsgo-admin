@@ -19,7 +19,7 @@ async function getRentalData() {
 function displayRentalData(rentalData) {
     // Select the element with id 'logs'
     const overviewSection = document.querySelector('#logs');
-    
+
     // Clear existing content
     overviewSection.innerHTML = '';
 
@@ -78,7 +78,7 @@ function displayRentalData(rentalData) {
 
 //logout button
 const logoutButton = document.getElementById('logoutButton');
-logoutButton.addEventListener('click', function() {
+logoutButton.addEventListener('click', function () {
     window.location.href = 'index.html';
 });
 

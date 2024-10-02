@@ -109,8 +109,8 @@ const collectionSchemas = {
     }
 };
 
-// const baseURL = "https://witsgobackend.azurewebsites.net/";
-const baseURL = "http://localhost:3000/";
+const baseURL = "https://witsgobackend.azurewebsites.net/";
+// const baseURL = "http://localhost:3000/";
 
 // State to track current action and collection
 let currentAction = "";
