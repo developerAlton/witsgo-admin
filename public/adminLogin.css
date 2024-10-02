@@ -16,7 +16,7 @@ body {
 
 .card-display {
     display: flex;
-    justify-content: center;    
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 450px;
@@ -61,13 +61,16 @@ body {
     margin-bottom: 10px;
     border-radius: 4px;
     font-size: 16px;
-    text-align: center; /* Center text and placeholder */
-    padding-left: 0; /* Remove default padding to center text expansion */
+    text-align: center;
+    /* Center text and placeholder */
+    padding-left: 0;
+    /* Remove default padding to center text expansion */
     padding-right: 0;
 }
 
 ::placeholder {
-    text-align: center; /* Center placeholder text */
+    text-align: center;
+    /* Center placeholder text */
 }
 
 .login-form input[type="submit"] {
