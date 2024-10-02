@@ -1,16 +1,20 @@
 /* Container for header and nav */
 #header-container {
-    position: fixed; /* Sticks the entire container to the top */
+    position: fixed;
+    /* Sticks the entire container to the top */
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 1000; /* Keeps it on top */
-    background-color: #23527c; /* Set a consistent background */
+    z-index: 1000;
+    /* Keeps it on top */
+    background-color: #23527c;
+    /* Set a consistent background */
 }
 
 /* Adjust body padding to avoid content being hidden by fixed header */
 body {
-    padding-top: 130px; /* Adjust this based on the combined height of header and nav */
+    padding-top: 130px;
+    /* Adjust this based on the combined height of header and nav */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -24,6 +28,8 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+
+
 }
 
 /* Header styles */
@@ -31,8 +37,9 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 20px; 
-    background-color: #23527c; /* Background color stays consistent */
+    padding: 10px 20px;
+    background-color: #23527c;
+    /* Background color stays consistent */
     color: #fff;
     font-size: 18px;
     width: 98%;
@@ -105,7 +112,7 @@ header img#profilePicture {
     flex-direction: column;
     width: 85%;
     max-width: 1000px;
-    height: auto;
+    /* height: auto; */
     margin: 30px auto;
 }
 
@@ -116,7 +123,8 @@ header img#profilePicture {
 }
 
 .card-content {
-    min-height: 150px; /* Start with a small height */
+    min-height: 150px;
+    /* Start with a small height */
     width: calc(100% - 40px);
     padding: 20px;
     border: 1px solid #ccc;
@@ -126,7 +134,8 @@ header img#profilePicture {
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease-in-out; /* Smooth growing animation */
+    transition: all 0.3s ease-in-out;
+    /* Smooth growing animation */
 }
 
 
@@ -136,7 +145,8 @@ header img#profilePicture {
     margin-top: 20px;
 }
 
-.rental-table th, .rental-table td {
+.rental-table th,
+.rental-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
@@ -145,4 +155,9 @@ header img#profilePicture {
 .rental-table th {
     background-color: #23527c;
     color: white;
+}
+
+
+.card-page {
+    overflow-x: scroll;
 }

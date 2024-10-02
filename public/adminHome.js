@@ -1,6 +1,27 @@
 const baseURL = "https://witsgobackend.azurewebsites.net/";
 // const baseURL = "http://localhost:3000/";
 
+
+const verifyToken = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+    try {
+        const response = await axios.post(baseURL + 'admin/verify', {
+            token
+        });
+        if (response.status !== 200) {
+            console.log('Invalid token');
+            window.location.href = 'index.html';
+        }
+    } catch (error) {
+        console.log(error);
+        window.location.href = 'index.html';
+    }
+}
+verifyToken();
+
 async function getRentalData() {
     let endpoint = "v1/rental/rentals";
     let url = baseURL + endpoint;
@@ -79,7 +100,11 @@ function displayRentalData(rentalData) {
 //logout button
 const logoutButton = document.getElementById('logoutButton');
 logoutButton.addEventListener('click', function () {
-    window.location.href = 'index.html';
+
+    localStorage.removeItem('token');
+    localStorage.clear();
+    window.location.href = '/';
+
 });
 
 // Call getRentalData function

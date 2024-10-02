@@ -1,9 +1,34 @@
+
+const baseURL = "https://witsgobackend.azurewebsites.net/";
+// const baseURL = "http://localhost:3000/";
+
+const verifyToken = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+    try {
+        const response = await axios.post(baseURL + 'admin/verify', {
+            token
+        });
+        if (response.status !== 200) {
+            console.log('Invalid token');
+            window.location.href = 'index.html';
+        }
+    } catch (error) {
+        console.log(error);
+        window.location.href = 'index.html';
+    }
+}
+verifyToken();
+
 // databasePage.js
 
 //logout button
 const logoutButton = document.getElementById('logoutButton');
 logoutButton.addEventListener('click', function () {
-    window.location.href = 'index.html';
+    localStorage.clear();
+    window.location.href = '/';
 });
 
 const databases = {
@@ -109,8 +134,6 @@ const collectionSchemas = {
     }
 };
 
-const baseURL = "https://witsgobackend.azurewebsites.net/";
-// const baseURL = "http://localhost:3000/";
 
 // State to track current action and collection
 let currentAction = "";

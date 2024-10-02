@@ -29,7 +29,7 @@ form.addEventListener('submit', async (event) => {
             const token = response.data.accessToken;
             console.log("token", token);
             localStorage.setItem('token', token);
-            window.location.href = `${clientUrl}/adminHome.html`;
+            window.location.href = `${clientUrl}/home`;
         }
 
 
