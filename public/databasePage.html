@@ -10,17 +10,20 @@
     <script src="databasePage.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1 style="display: flex; align-items: center; justify-content: space-between;">
-            <img src="profile.png" alt="Profile Picture" id="profilePicture">
-            <span style="margin: auto;">Database</span>
-        </h1>
-    </header>
-
-    <nav class="topNav">
-        <a href="adminHome.html">Home</a>
-        <a href="databasePage.html">Database</a>
-    </nav>
+    <div id="header-container">
+        <header>
+            <div id="header-content">
+                <img src="profile.png" alt="Profile Picture" id="profilePicture">
+                <h2>Home</h2>
+            </div>
+            <button id="logoutButton">Logout</button>
+        </header>
+        
+        <nav class="topNav">
+            <a href="adminHome.html">Home</a>
+            <a href="databasePage.html">Database</a>
+        </nav>
+    </div>
 
     <section class="card-display">
         
@@ -69,8 +72,6 @@
         <!-- Cards will be dynamically appended here -->
 
     </div>
-    
-    
     
 </body>
 </html>

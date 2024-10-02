@@ -1,55 +1,83 @@
 body {
+    padding-top: 130px; /* Adjust this based on the combined height of header and nav */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
-    background-color: #dbdbdb;
+    background-color: #4acfbc;
     font-family: Arial, sans-serif;
     font-size: 18px;
+    width: 100%;
     background-image: url('background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
     background-attachment: fixed;
 }
 
+/* Container for header and nav */
+#header-container {
+    position: fixed; /* Sticks the entire container to the top */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Keeps it on top */
+    background-color: #23527c; /* Set a consistent background */
+}
+
+/* Header styles */
 header {
-    background-color: #23527c;
-    color: #fff;
-    padding-left: 20px;
-    text-align: center;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    font-size: 24px;
-    width: 100%;
+    padding: 10px 20px; 
+    background-color: #23527c; /* Background color stays consistent */
+    color: #fff;
+    font-size: 18px;
+    width: 98%;
+    height: 60px;
+}
+
+#header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 150px;
 }
 
 header img#profilePicture {
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    margin-right: 15px;
 }
 
+#logoutButton {
+    background-color: #fff;
+    color: #23527c;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+#logoutButton:hover {
+    background-color: #ddd;
+}
+
+/* Navigation bar styles */
 .topNav {
-    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #817daf;
     color: #fff;
-    padding: 20px;
-    text-align: center;
-    width: 100%;
+    padding: 10px 0;
     font-size: 20px;
-}
-
-.topNav nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 700px;
-    margin: 0 auto;
+    width: 100%;
+    height: 20px;
 }
 
 .topNav a {
@@ -63,7 +91,6 @@ header img#profilePicture {
     color: #ddd;
 }
 
-
 /* Main card (for database selection) */
 .card-display {
     flex: 1;
@@ -71,21 +98,31 @@ header img#profilePicture {
     flex-direction: column;
     width: 85%;
     max-width: 1000px;
+    height: auto;
     margin: 30px auto;
 }
 
 .card-content {
-    flex: 1;
+    min-height: 150px; /* Start with a small height */
     width: calc(100% - 40px);
-    height: 100%;
+    padding: 20px;
     border: 1px solid #ccc;
     border-radius: 15px;
     overflow: hidden;
-    padding: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     display: flex;
     flex-direction: column;
+    transition: all 0.3s ease-in-out; /* Smooth growing animation */
+}
+
+.card-content.dynamic {
+    min-height: auto; /* Remove fixed min-height to grow with content */
+}
+
+.card-content h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 /* Data cards (for generated data) */
@@ -107,7 +144,6 @@ header img#profilePicture {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); /* Softer shadow */
     font-size: 14px; /* Smaller text size */
 }
-
 
 #selectDb {
     display: flex;
@@ -131,7 +167,6 @@ header img#profilePicture {
     margin: 10px;
     padding: 5px;
 }
-
 
 .output{
     margin: 10;

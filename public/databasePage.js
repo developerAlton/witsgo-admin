@@ -1,4 +1,11 @@
 // databasePage.js
+
+//logout button
+const logoutButton = document.getElementById('logoutButton');
+logoutButton.addEventListener('click', function() {
+    window.location.href = 'index.html';
+});
+
 const databases = {
     "Map": ["Amenity", "Building", "PointOfInterest", "Room", "Route"],
     "UserRoutes": ["NavigationHistory", "Preferences", "Routes", "User"],
