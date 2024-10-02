@@ -13,11 +13,11 @@ const verifyToken = async () => {
         });
         if (response.status !== 200) {
             console.log('Invalid token');
-            window.location.href = 'index.html';
+            window.location.href = '/';
         }
     } catch (error) {
         console.log(error);
-        window.location.href = 'index.html';
+        window.location.href = '/';
     }
 }
 verifyToken();
