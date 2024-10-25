@@ -1,6 +1,4 @@
-const baseURL = "https://witsgobackend.azurewebsites.net/";
-// const baseURL = "http://localhost:3000/";
-
+import { clientUrl, serverUrl } from "./constants.js";
 
 const verifyToken = async () => {
     const token = localStorage.getItem('token');
@@ -8,7 +6,7 @@ const verifyToken = async () => {
         window.location.href = 'index.html';
     }
     try {
-        const response = await axios.post(baseURL + 'admin/verify', {
+        const response = await axios.post(serverUrl + 'admin/verify', {
             token
         });
         if (response.status !== 200) {
@@ -24,7 +22,7 @@ verifyToken();
 
 async function getRentalData() {
     let endpoint = "v1/rental/rentals";
-    let url = baseURL + endpoint;
+    let url = serverUrl + endpoint;
 
     try {
         const response = await axios.get(url);
