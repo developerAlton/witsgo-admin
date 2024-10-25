@@ -1,4 +1,10 @@
-import { clientUrl, serverUrl } from "./constants.js";
+// const serverUrl = 'http://localhost:3000/';
+// const clientUrl = 'http://localhost:5001/';
+
+// // Production
+const serverUrl = 'https://witsgobackend.azurewebsites.net/';
+const clientUrl = 'https://witsgoadmin.azurewebsites.net/';
+
 
 const verifyToken = async () => {
     const token = localStorage.getItem('token');
