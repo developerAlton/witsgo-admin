@@ -1,6 +1,10 @@
+// const serverUrl = 'http://localhost:3000/';
+// const clientUrl = 'http://localhost:5001/';
 
-const baseURL = "https://witsgobackend.azurewebsites.net/";
-// const baseURL = "http://localhost:3000/";
+// // Production
+const serverUrl = 'https://witsgobackend.azurewebsites.net/';
+const clientUrl = 'https://witsgoadmin.azurewebsites.net/';
+
 
 const verifyToken = async () => {
     const token = localStorage.getItem('token');
@@ -8,7 +12,7 @@ const verifyToken = async () => {
         window.location.href = 'index.html';
     }
     try {
-        const response = await axios.post(baseURL + 'admin/verify', {
+        const response = await axios.post(serverUrl + 'admin/verify', {
             token
         });
         if (response.status !== 200) {
@@ -267,7 +271,7 @@ async function populateUpdate(event) {
         "data": { "_id": document.getElementById("_id").value }
     }
 
-    const res = await axios.post(baseURL + "v1/admin/get_data", toSendData, {
+    const res = await axios.post(serverUrl + "v1/admin/get_data", toSendData, {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -402,7 +406,7 @@ async function handleSubmit(event) {
     console.log(toSendData);
 
     let endpoint = "v1/admin/" + currentAction + "_data";
-    let url = baseURL + endpoint;
+    let url = serverUrl + endpoint;
 
     try {
         const res = await axios.post(url, toSendData, {
